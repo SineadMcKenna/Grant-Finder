@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Business Support Finder | Go Succeed with Sinéad</title>
+<!-- Google Analytics 4 — replace GA_MEASUREMENT_ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  gtag('config','GA_MEASUREMENT_ID');
+</script>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --green:#005C3B;--green-mid:#007A50;--green-light:#00A878;
+  --bg:#F2F7F5;--card:#fff;--text:#1A1A1A;--muted:#5E6E67;
+  --border:#D8E8E2;--shadow:0 2px 14px rgba(0,92,59,.09);--r:14px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+
+/* ── HEADER ── */
+.hdr{background:var(--green);color:#fff;padding:22px 20px 0;text-align:center}
+.hdr-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.7;margin-bottom:4px}
+.hdr h1{font-size:22px;font-weight:800;margin-bottom:5px}
+.hdr-sub{font-size:13px;opacity:.82;margin-bottom:14px}
+.mentor-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border-radius:30px;padding:6px 14px 6px 8px;font-size:13px;margin-bottom:16px}
+.av{width:30px;height:30px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;flex-shrink:0}
+.av-lg{width:50px;height:50px;font-size:18px}
+.prog-bar{background:rgba(255,255,255,.18);height:4px;width:100%;margin-top:0}
+.prog-fill{background:var(--green-light);height:100%;border-radius:2px;transition:width .4s ease;width:0%}
+
+/* ── LAYOUT ── */
+.wrap{max-width:560px;margin:0 auto;padding:22px 16px 40px}
+.screen{display:none;animation:up .3s ease}
+.screen.on{display:block}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:var(--r);padding:24px 20px;box-shadow:var(--shadow);margin-bottom:18px}
+
+/* ── WELCOME ── */
+.intro-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.intro-txt h2{font-size:17px;font-weight:800;color:var(--green);margin-bottom:2px}
+.intro-txt p{font-size:13px;color:var(--muted)}
+.intro-msg{font-size:15px;line-height:1.65;color:var(--text)}
+.intro-msg strong{color:var(--green)}
+
+/* ── FORM ── */
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.fg input{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:9px;font-size:16px;color:var(--text);background:#fff;transition:border-color .2s;appearance:none;-webkit-appearance:none}
+.fg input:focus{outline:none;border-color:var(--green)}
+.tgl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tgl-opt{position:relative}
+.tgl-opt input{position:absolute;opacity:0;width:0;height:0}
+.tgl-opt label{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;border:2px solid var(--border);border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
+.tgl-opt input:checked+label{border-color:var(--green);background:rgba(0,92,59,.06);color:var(--green)}
+
+/* ── QUESTIONS ── */
+.q-step{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--green-light);margin-bottom:6px}
+.q-title{font-size:21px;font-weight:800;line-height:1.3;margin-bottom:6px}
+.q-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{background:#fff;border:2px solid var(--border);border-radius:11px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .17s ease}
+.opt:active{transform:scale(.98)}
+.opt.sel{border-color:var(--green);background:rgba(0,92,59,.05)}
+.opt.sel .chk{background:var(--green);border-color:var(--green)}
+.opt.sel .chk::after{content:'✓';font-size:11px;font-weight:800;color:#fff}
+.oico{font-size:22px;flex-shrink:0;line-height:1}
+.otxt{flex:1}
+.otxt strong{display:block;font-size:14px;font-weight:700;margin-bottom:1px}
+.otxt small{font-size:12px;color:var(--muted);line-height:1.3}
+.chk{width:22px;height:22px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .17s}
+.opts.two .opt{flex-direction:column;align-items:flex-start;gap:6px;padding:12px}
+.opts.two .otxt strong{font-size:13px}
+.opts.two .chk{display:none}
+.opts.two .opt.sel::after{content:'✓';position:absolute;top:10px;right:10px;font-size:11px;font-weight:800;color:var(--green)}
+.opts.two .opt{position:relative}
+
+/* ── BUTTONS ── */
+.btn{display:block;width:100%;padding:15px;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all .18s;text-align:center;letter-spacing:.2px}
+.btn-p{background:var(--green);color:#fff}
+.btn-p:active{opacity:.88;transform:scale(.99)}
+.btn-p:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-out{background:#fff;color:var(--green);border:2px solid var(--green)}
+.back-btn{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:0 0 16px;display:flex;align-items:center;gap:5px;font-family:inherit}
+.nav{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+
+/* ── LOADING ── */
+.load-wrap{text-align:center;padding:40px 10px}
+.rings{width:80px;height:80px;margin:0 auto 28px;position:relative}
+.ring{position:absolute;inset:0;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite}
+.ring:nth-child(2){inset:12px;border-top-color:var(--green-light);animation-duration:.7s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-title{font-size:20px;font-weight:800;color:var(--green);margin-bottom:8px}
+.load-sub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.steps{list-style:none;display:inline-block;text-align:left}
+.step{font-size:13px;color:var(--muted);padding:5px 0;display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .5s ease}
+.step.vis{opacity:1}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background .4s}
+.step.vis .dot{background:var(--green-light)}
+
+/* ── RESULTS ── */
+.mentor-note{background:var(--green);color:#fff;border-radius:var(--r);padding:20px 18px;margin-bottom:18px;display:flex;gap:14px;align-items:flex-start}
+.note-body .from{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+.note-body p{font-size:15px;line-height:1.65}
+.res-sum{font-size:13px;color:var(--muted);margin-bottom:14px}
+.res-sum strong{color:var(--green);font-weight:700}
+
+.rc{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+.rc-head{padding:16px 18px 13px;border-bottom:1px solid var(--border)}
+.badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.b-grant{background:#E8F5E9;color:#2E7D32}
+.b-loan{background:#E3F2FD;color:#1565C0}
+.b-mentoring{background:#FFF3E0;color:#E65100}
+.b-training{background:#F3E5F5;color:#6A1B9A}
+.b-mixed{background:#EDF7F3;color:#005C3B}
+.rc-name{font-size:17px;font-weight:800;line-height:1.3;margin-bottom:3px}
+.rc-prov{font-size:12px;color:var(--muted);font-weight:600}
+.rc-body{padding:16px 18px}
+.rl{font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;margin-top:12px}
+.rl:first-child{margin-top:0}
+.rv{font-size:14px;color:var(--text);line-height:1.55}
+.why-box{background:rgba(0,92,59,.06);border-left:3px solid var(--green-light);border-radius:0 7px 7px 0;padding:10px 12px;font-size:14px;color:var(--green);line-height:1.5;margin-top:12px}
+.dl-row{display:flex;align-items:center;gap:7px;font-size:13px;margin-top:10px}
+.rc-foot{padding:13px 18px;background:var(--bg);border-top:1px solid var(--border)}
+.apply-link{display:block;width:100%;padding:13px;background:var(--green);color:#fff;text-align:center;text-decoration:none;border-radius:9px;font-size:15px;font-weight:700;transition:opacity .2s}
+.apply-link:active{opacity:.85}
+
+/* ── END OPTIONS ── */
+.eo-wrap{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-top:22px;margin-bottom:18px}
+.eo{display:flex;align-items:center;gap:13px;padding:17px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.eo:last-child{border-bottom:none}
+.eo:active{background:var(--bg)}
+.eo-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ei-pdf{background:#FFEBEE}
+.ei-mentor{background:#E3F2FD}
+.ei-share{background:#E8F5E9}
+.ei-restart{background:#FFF8E1}
+.eo-txt strong{display:block;font-size:14px;font-weight:700;margin-bottom:1px}
+.eo-txt small{font-size:12px;color:var(--muted)}
+.eo-arr{margin-left:auto;color:#ccc;font-size:20px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1a1a1a;color:#fff;padding:11px 20px;border-radius:30px;font-size:14px;font-weight:500;transition:transform .3s ease;z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:10px 20px 30px;font-size:11px;color:var(--muted)}
+
+/* ── PRINT ── */
+@media print{
+  .hdr .prog-bar,.back-btn,.nav,.eo-wrap,footer,.toast{display:none!important}
+  .screen{display:block!important}
+  #s-welcome,#s-q1,#s-q2,#s-q3,#s-q4,#s-q5,#s-q6,#s-q7,#s-load{display:none!important}
+  .rc{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  body{background:#fff}
+}
+@media(max-width:400px){.opts.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-tag">Go Succeed · Business Support</div>
+  <h1>Grant & Programme Finder</h1>
+  <div class="hdr-sub">Find what's open and available for your business right now</div>
+  <div class="mentor-pill">
+    <div class="av">SM</div>
+    <span>With your mentor, Sinéad McKenna</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="prog"></div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- ── SCREEN 0: WELCOME ── -->
+  <div class="screen on" id="s-welcome">
+    <div class="card">
+      <div class="intro-row">
+        <div class="av av-lg">SM</div>
+        <div class="intro-txt">
+          <h2>Hi, I'm Sinéad! 👋</h2>
+          <p>Go Succeed Business Mentor<br>Omagh Enterprise Company</p>
+        </div>
+      </div>
+      <p class="intro-msg">Tell me about your business and I'll search <strong>all publicly available sources</strong> right now to find grants and programmes that are <strong>currently open and relevant to you</strong> — nothing generic, nothing closed.</p>
+    </div>
+    <div class="card" style="margin-top:0">
+      <h3 style="font-size:15px;font-weight:800;color:var(--green);margin-bottom:18px">Let's start with a few details</h3>
+      <div class="fg"><label>Your Full Name</label><input type="text" id="inp-name" placeholder="e.g. Sarah Murphy" autocomplete="name"></div>
+      <div class="fg"><label>Email Address</label><input type="email" id="inp-email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="fg"><label>Business Name</label><input type="text" id="inp-biz" placeholder="e.g. Murphy's Coffee Co." autocomplete="organization"></div>
+      <div class="fg">
+        <label>Are you currently working with a Go Succeed mentor?</label>
+        <div class="tgl">
+          <div class="tgl-opt"><input type="radio" name="gs" id="gs-y" value="Yes — currently on the programme"><label for="gs-y">✅ Yes I am</label></div>
+          <div class="tgl-opt"><input type="radio" name="gs" id="gs-n" value="Not yet — exploring independently"><label for="gs-n">👋 Not Yet</label></div>
+        </div>
+      </div>
+      <button class="btn btn-p" onclick="startQ()">Find My Opportunities →</button>
+    </div>
+  </div>
+
+  <!-- ── Q1: STRUCTURE ── -->
+  <div class="screen" id="s-q1">
+    <button class="back-btn" onclick="goBack(1)">← Back</button>
+    <div class="q-step">Step 1 of 7</div>
+    <div class="q-title">What's your business structure?</div>
+    <div class="q-sub">This is the most important filter — many grants are restricted by business type</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,'structure','Sole Trader')"><div class="oico">🧑‍💼</div><div class="otxt"><strong>Sole Trader</strong><small>Self-employed, trading as yourself</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'structure','Limited Company (Ltd)')"><div class="oico">🏢</div><div class="otxt"><strong>Limited Company</strong><small>Ltd registered at Companies House</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'structure','Partnership')"><div class="oico">🤝</div><div class="otxt"><strong>Partnership</strong><small>Business shared between two or more people</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'structure','Social Enterprise')"><div class="oico">💚</div><div class="otxt"><strong>Social Enterprise</strong><small>Business with a social or environmental mission</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'structure','Community Interest Company (CIC)')"><div class="oico">🌱</div><div class="otxt"><strong>CIC — Community Interest Company</strong><small>A specific type of social enterprise</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'structure','Charity / Non-Profit')"><div class="oico">❤️</div><div class="otxt"><strong>Charity / Non-Profit</strong><small>Registered charity or not-for-profit</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'structure','Community Group (Unincorporated)')"><div class="oico">👥</div><div class="otxt"><strong>Community Group</strong><small>Informal or constituted organisation</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'structure','Pre-Registration — Idea Stage')"><div class="oico">💡</div><div class="otxt"><strong>Not Yet Registered</strong><small>Still at the idea or pre-start stage</small></div><div class="chk"></div></div>
+    </div>
+    <div class="nav"><button class="btn btn-p" id="b1" onclick="goQ(2)" disabled>Continue →</button></div>
+  </div>
+
+  <!-- ── Q2: STAGE ── -->
+  <div class="screen" id="s-q2">
+    <button class="back-btn" onclick="goBack(2)">← Back</button>
+    <div class="q-step">Step 2 of 7</div>
+    <div class="q-title">What stage is your business at?</div>
+    <div class="q-sub">Many programmes are designed for specific stages of growth</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,'stage','Pre-Start — Idea Stage, not yet trading')"><div class="oico">💡</div><div class="otxt"><strong>Pre-Start</strong><small>Developing the idea, not yet trading</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'stage','Start-Up — Trading under 1 year')"><div class="oico">🚀</div><div class="otxt"><strong>Start-Up</strong><small>Trading for less than 1 year</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'stage','Early Stage — Trading 1 to 3 years')"><div class="oico">🌱</div><div class="otxt"><strong>Early Stage</strong><small>Trading for 1–3 years</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'stage','Established — Trading 3+ years')"><div class="oico">🏆</div><div class="otxt"><strong>Established</strong><small>Trading for 3 or more years</small></div><div class="chk"></div></div>
+    </div>
+    <div class="nav"><button class="btn btn-p" id="b2" onclick="goQ(3)" disabled>Continue →</button></div>
+  </div>
+
+  <!-- ── Q3: SECTOR ── -->
+  <div class="screen" id="s-q3">
+    <button class="back-btn" onclick="goBack(3)">← Back</button>
+    <div class="q-step">Step 3 of 7</div>
+    <div class="q-title">What sector are you in?</div>
+    <div class="q-sub">Choose the one that best describes your business</div>
+    <div class="opts two">
+      <div class="opt" onclick="pick(this,'sector','Agriculture / Agri-Food')"><div class="oico">🌾</div><div class="otxt"><strong>Agriculture / Agri-Food</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Creative Industries')"><div class="oico">🎨</div><div class="otxt"><strong>Creative Industries</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Digital & Technology')"><div class="oico">💻</div><div class="otxt"><strong>Digital & Tech</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Construction & Property')"><div class="oico">🏗️</div><div class="otxt"><strong>Construction</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Retail & E-Commerce')"><div class="oico">🛒</div><div class="otxt"><strong>Retail & E-Commerce</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Tourism & Hospitality')"><div class="oico">🏨</div><div class="otxt"><strong>Tourism & Hospitality</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Health & Wellbeing')"><div class="oico">💊</div><div class="otxt"><strong>Health & Wellbeing</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Manufacturing')"><div class="oico">🏭</div><div class="otxt"><strong>Manufacturing</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Food & Drink')"><div class="oico">🍽️</div><div class="otxt"><strong>Food & Drink</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Professional Services')"><div class="oico">📊</div><div class="otxt"><strong>Professional Services</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Education & Training')"><div class="oico">📚</div><div class="otxt"><strong>Education & Training</strong></div></div>
+      <div class="opt" onclick="pick(this,'sector','Other / General Business')"><div class="oico">🔹</div><div class="otxt"><strong>Other / General</strong></div></div>
+    </div>
+    <div class="nav"><button class="btn btn-p" id="b3" onclick="goQ(4)" disabled>Continue →</button></div>
+  </div>
+
+  <!-- ── Q4: LOCATION ── -->
+  <div class="screen" id="s-q4">
+    <button class="back-btn" onclick="goBack(4)">← Back</button>
+    <div class="q-step">Step 4 of 7</div>
+    <div class="q-title">Where is your business based?</div>
+    <div class="q-sub">Some grants are specific to your council area</div>
+    <div class="opts two">
+      <div class="opt" onclick="pick(this,'location','Fermanagh & Omagh')"><div class="otxt"><strong>Fermanagh & Omagh</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Mid Ulster')"><div class="otxt"><strong>Mid Ulster</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Derry City & Strabane')"><div class="otxt"><strong>Derry City & Strabane</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Belfast City')"><div class="otxt"><strong>Belfast City</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Antrim & Newtownabbey')"><div class="otxt"><strong>Antrim & Newtownabbey</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Armagh, Banbridge & Craigavon')"><div class="otxt"><strong>Armagh, Banbridge & Craigavon</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Causeway Coast & Glens')"><div class="otxt"><strong>Causeway Coast & Glens</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Lisburn & Castlereagh')"><div class="otxt"><strong>Lisburn & Castlereagh</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Mid & East Antrim')"><div class="otxt"><strong>Mid & East Antrim</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Newry, Mourne & Down')"><div class="otxt"><strong>Newry, Mourne & Down</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','North Down & Ards')"><div class="otxt"><strong>North Down & Ards</strong></div></div>
+      <div class="opt" onclick="pick(this,'location','Across all of Northern Ireland')"><div class="otxt"><strong>All of NI / Not Area-Specific</strong></div></div>
+    </div>
+    <div class="nav"><button class="btn btn-p" id="b4" onclick="goQ(5)" disabled>Continue →</button></div>
+  </div>
+
+  <!-- ── Q5: VAT ── -->
+  <div class="screen" id="s-q5">
+    <button class="back-btn" onclick="goBack(5)">← Back</button>
+    <div class="q-step">Step 5 of 7</div>
+    <div class="q-title">Are you VAT registered?</div>
+    <div class="q-sub">Some funding programmes use this as an eligibility filter</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,'vat','Yes — VAT Registered')"><div class="oico">✅</div><div class="otxt"><strong>Yes</strong><small>I am VAT registered</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'vat','No — Not VAT Registered')"><div class="oico">❌</div><div class="otxt"><strong>No</strong><small>I am not VAT registered</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'vat','Not Sure / Not Applicable')"><div class="oico">🤷</div><div class="otxt"><strong>Not Sure</strong><small>I'm unsure or it doesn't apply yet</small></div><div class="chk"></div></div>
+    </div>
+    <div class="nav"><button class="btn btn-p" id="b5" onclick="goQ(6)" disabled>Continue →</button></div>
+  </div>
+
+  <!-- ── Q6: EMPLOYEES ── -->
+  <div class="screen" id="s-q6">
+    <button class="back-btn" onclick="goBack(6)">← Back</button>
+    <div class="q-step">Step 6 of 7</div>
+    <div class="q-title">How many people work in your business?</div>
+    <div class="q-sub">Including yourself — this affects which size-based grants you can access</div>
+    <div class="opts">
+      <div class="opt" onclick="pick(this,'employees','Just Me — Sole Operator, no employees')"><div class="oico">🧍</div><div class="otxt"><strong>Just Me</strong><small>No employees, working alone</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'employees','1 to 5 employees — Micro Business')"><div class="oico">👥</div><div class="otxt"><strong>1–5 People</strong><small>Micro business</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'employees','6 to 10 employees — Small Team')"><div class="oico">👨‍👩‍👧‍👦</div><div class="otxt"><strong>6–10 People</strong><small>Small team</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'employees','11 to 49 employees — Growing SME')"><div class="oico">🏢</div><div class="otxt"><strong>11–49 People</strong><small>Growing SME</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="pick(this,'employees','50 or more employees — Medium/Large Business')"><div class="oico">🏭</div><div class="otxt"><strong>50+ People</strong><small>Medium to large business</small></div><div class="chk"></div></div>
+    </div>
+    <div class="nav"><button class="btn btn-p" id="b6" onclick="goQ(7)" disabled>Continue →</button></div>
+  </div>
+
+  <!-- ── Q7: SUPPORT TYPE ── -->
+  <div class="screen" id="s-q7">
+    <button class="back-btn" onclick="goBack(7)">← Back</button>
+    <div class="q-step">Step 7 of 7</div>
+    <div class="q-title">What type of support matters most?</div>
+    <div class="q-sub">You can select more than one</div>
+    <div class="opts">
+      <div class="opt" onclick="multi(this,'Financial Support — Grants & Loans')"><div class="oico">💰</div><div class="otxt"><strong>Financial Support</strong><small>Grants, loans, or investment funding</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="multi(this,'Mentoring & Business Advice')"><div class="oico">🧭</div><div class="otxt"><strong>Mentoring & Advice</strong><small>Expert guidance from experienced advisors</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="multi(this,'Training & Skills Development')"><div class="oico">📚</div><div class="otxt"><strong>Training & Skills</strong><small>Programmes to build expertise and capability</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="multi(this,'Networking, Export & Market Access')"><div class="oico">🌍</div><div class="otxt"><strong>Networking & Export</strong><small>Connections, markets, and trade opportunities</small></div><div class="chk"></div></div>
+      <div class="opt" onclick="multi(this,'All Types — Show Me Everything Available')"><div class="oico">🎯</div><div class="otxt"><strong>Show Me Everything</strong><small>I want to see all available opportunities</small></div><div class="chk"></div></div>
+    </div>
+    <div class="nav"><button class="btn btn-p" id="b7" onclick="doSearch()" disabled>🔍 Search for My Opportunities</button></div>
+  </div>
+
+  <!-- ── LOADING ── -->
+  <div class="screen" id="s-load">
+    <div class="load-wrap">
+      <div class="rings"><div class="ring"></div><div class="ring"></div></div>
+      <div class="load-title">Sinéad is searching for you…</div>
+      <div class="load-sub">Scanning all publicly available sources across Northern Ireland</div>
+      <ul class="steps">
+        <li class="step" id="ls1"><div class="dot"></div>Checking NIBusinessInfo (200+ schemes)</li>
+        <li class="step" id="ls2"><div class="dot"></div>Searching Invest NI programmes</li>
+        <li class="step" id="ls3"><div class="dot"></div>Checking InterTradeIreland</li>
+        <li class="step" id="ls4"><div class="dot"></div>Scanning local council funding</li>
+        <li class="step" id="ls5"><div class="dot"></div>Checking UK-wide opportunities</li>
+        <li class="step" id="ls6"><div class="dot"></div>Filtering to your exact business profile</li>
+        <li class="step" id="ls7"><div class="dot"></div>Preparing your personalised results</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── RESULTS ── -->
+  <div class="screen" id="s-results">
+    <div class="mentor-note">
+      <div class="av av-lg">SM</div>
+      <div class="note-body">
+        <div class="from">From Sinéad — Your Mentor</div>
+        <p id="note-txt">Loading your message…</p>
+      </div>
+    </div>
+    <div class="res-sum" id="res-sum"></div>
+    <div id="res-cards"></div>
+    <div class="eo-wrap">
+      <div class="eo" onclick="doPDF()"><div class="eo-icon ei-pdf">📄</div><div class="eo-txt"><strong>Save as PDF</strong><small>Download your results to keep</small></div><div class="eo-arr">›</div></div>
+      <div class="eo" onclick="doMentor()"><div class="eo-icon ei-mentor">📬</div><div class="eo-txt"><strong>Share with Sinéad</strong><small>Send your results to your mentor</small></div><div class="eo-arr">›</div></div>
+      <div class="eo" onclick="doShare()"><div class="eo-icon ei-share">📤</div><div class="eo-txt"><strong>Share These Results</strong><small>Send to a colleague or save for later</small></div><div class="eo-arr">›</div></div>
+      <div class="eo" onclick="doRestart()"><div class="eo-icon ei-restart">🔄</div><div class="eo-txt"><strong>Search Again</strong><small>Try with different business details</small></div><div class="eo-arr">›</div></div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);text-align:center;padding-bottom:10px">Grant availability changes frequently. Always verify directly with providers before applying.</p>
+  </div>
+
+</div><!-- /wrap -->
+
+<footer>
+  A tool built for Go Succeed clients by Sinéad McKenna &bull; Omagh Enterprise Company<br>
+  Always verify opportunities directly with the provider before applying
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════
+//  CONFIGURATION — UPDATE FOR GITHUB PAGES
+// ═══════════════════════════════════════════════
+const CFG = {
+  API_KEY:            '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',  // Add your key for GitHub Pages
+  EMAILJS_PK:         'YOUR_EMAILJS_PUBLIC_KEY',
+  EMAILJS_SVC:        'YOUR_EMAILJS_SERVICE_ID',
+  EMAILJS_TPL:        'YOUR_EMAILJS_TEMPLATE_ID',
+  SINEAD_EMAIL:       'sinead@omaghenterprise.co.uk',
+  SHEETS_URL:         'YOUR_GOOGLE_APPS_SCRIPT_URL'
+};
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+const A = {name:'',email:'',biz:'',gs:'',structure:'',stage:'',sector:'',location:'',vat:'',employees:'',support:[]};
+let lastResults = null;
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+const pct=[0,12,24,36,50,62,74,86,93,100];
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function prog(n){document.getElementById('prog').style.width=pct[n]+'%'}
+
+function startQ(){
+  const n=document.getElementById('inp-name').value.trim();
+  const e=document.getElementById('inp-email').value.trim();
+  const b=document.getElementById('inp-biz').value.trim();
+  const g=document.querySelector('input[name="gs"]:checked');
+  if(!n||!e||!b){toast('Please fill in all fields ✏️');return}
+  if(!e.includes('@')){toast('Please enter a valid email address');return}
+  if(!g){toast('Please let me know if you\'re on the programme');return}
+  A.name=n;A.email=e;A.biz=b;A.gs=g.value;
+  log('started');
+  gtag('event','quiz_started',{business:b});
+  show('s-q1');prog(1);
+}
+
+function goQ(n){show('s-q'+n);prog(n)}
+function goBack(cur){
+  if(cur===1){show('s-welcome');prog(0)}
+  else{show('s-q'+(cur-1));prog(cur-1)}
+}
+
+// ═══════════════════════════════════════════════
+//  SELECTION
+// ═══════════════════════════════════════════════
+const btnMap={structure:'b1',stage:'b2',sector:'b3',location:'b4',vat:'b5',employees:'b6'};
+function pick(el,field,val){
+  el.closest('.opts').querySelectorAll('.opt:not([onclick*="multi"])').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  A[field]=val;
+  if(btnMap[field])document.getElementById(btnMap[field]).disabled=false;
+}
+function multi(el,val){
+  el.classList.toggle('sel');
+  if(el.classList.contains('sel')){if(!A.support.includes(val))A.support.push(val)}
+  else{A.support=A.support.filter(v=>v!==val)}
+  document.getElementById('b7').disabled=A.support.length===0;
+}
+
+// ═══════════════════════════════════════════════
+//  LOADING ANIMATION
+// ═══════════════════════════════════════════════
+function animLoad(){
+  ['ls1','ls2','ls3','ls4','ls5','ls6','ls7'].forEach((id,i)=>{
+    setTimeout(()=>document.getElementById(id).classList.add('vis'),i*1300);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  MAIN SEARCH
+// ═══════════════════════════════════════════════
+async function doSearch(){
+  show('s-load');prog(8);animLoad();
+  gtag('event','search_submitted',{structure:A.structure,sector:A.sector,stage:A.stage});
+
+  const SYS=`You are a specialist Northern Ireland business grant and programme finder, operating on behalf of Sinéad McKenna, a Go Succeed Business Mentor at Omagh Enterprise Company in Omagh.
+
+Your job is to search the web RIGHT NOW and find grants, programmes, and business support that are CURRENTLY OPEN for this specific client in Northern Ireland.
+
+CRITICAL RULES — follow these absolutely:
+1. ONLY include programmes confirmed as currently OPEN for applications today
+2. NEVER include closed, expired, paused, or fully allocated programmes
+3. Every result must be genuinely eligible for this client's exact profile (structure, stage, sector, size, location)
+4. Always include a direct URL link to apply or find out more
+5. Search widely: NIBusinessInfo, Invest NI, InterTradeIreland, Fermanagh Omagh District Council, Mid Ulster Council, all other NI councils, Prince's Trust, Start Up Loans, Innovate UK, UKRI, British Business Bank, and any other publicly available NI-relevant source
+6. If you cannot confirm a programme is currently open — exclude it entirely
+7. Prioritise relevance and precision over quantity
+
+YOU MUST reply ONLY with a valid JSON object — no other text, no markdown fences. Use exactly this structure:
+{
+  "mentorNote": "Warm, personal 2-3 sentence note from Sinéad to the client by name, about their specific business, acknowledging their profile and what you found for them",
+  "results": [
+    {
+      "name": "Programme or grant name",
+      "provider": "Organisation providing it",
+      "supportType": "Grant|Loan|Mentoring|Training|Mixed",
+      "whatItOffers": "Clear description of what support or funding is available, including amounts where known",
+      "whoItsFor": "Eligibility summary — be specific and honest",
+      "whyRelevant": "One sentence explaining exactly why this matches this client's specific profile",
+      "deadline": "Closing date, 'Rolling applications', or 'Open — check website for current deadline'",
+      "applyLink": "Direct URL to apply or find out more"
+    }
+  ],
+  "totalFound": <number>,
+  "searchDate": "<today's date in DD Month YYYY format>"
+}`;
+
+  const MSG=`Please search now for currently open grants and business support for this client:
+
+CLIENT PROFILE:
+- Name: ${A.name}
+- Business Name: ${A.biz}
+- Business Structure: ${A.structure}
+- Business Stage: ${A.stage}
+- Sector: ${A.sector}
+- Council / Location: ${A.location}
+- VAT Registered: ${A.vat}
+- Number of Employees: ${A.employees}
+- Support Interested In: ${A.support.join(', ')}
+- Currently on Go Succeed Programme: ${A.gs}
+- Date of Search: ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
+
+Search across all publicly available NI-relevant sources. Only return currently open, genuinely eligible opportunities for this exact client profile. Write the mentorNote warmly and personally using both the client's name and business name.`;
+
+  try{
+    const hdrs={
+      'Content-Type':'application/json',
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    };
+    if(CFG.API_KEY&&CFG.API_KEY!=='YOUR_ANTHROPIC_API_KEY')hdrs['x-api-key']=CFG.API_KEY;
+
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:hdrs,
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:4000,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        system:SYS,
+        messages:[{role:'user',content:MSG}]
+      })
+    });
+
+    if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API error '+r.status)}
+    const data=await r.json();
+    const txts=data.content.filter(b=>b.type==='text');
+    if(!txts.length)throw new Error('No response received');
+    const raw=txts[txts.length-1].text;
+    const match=raw.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('Could not parse response');
+    lastResults=JSON.parse(match[0]);
+    log('completed',lastResults.results?.length||0);
+    renderResults(lastResults);
+  }catch(err){
+    console.error(err);
+    show('s-results');prog(9);
+    document.getElementById('note-txt').textContent=`Hi ${A.name}, I hit a technical snag while searching — sorry about that. Please try again in a moment, or get in touch with me directly and we can go through what's available together.`;
+    document.getElementById('res-cards').innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--muted)"><div style="font-size:48px;margin-bottom:14px">⚠️</div><p style="font-size:15px;font-weight:600">Something went wrong</p><p style="font-size:13px;margin-top:6px">${err.message}</p><button class="btn btn-p" style="margin-top:20px;max-width:200px;margin-left:auto;margin-right:auto" onclick="doSearch()">Try Again</button></div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER RESULTS
+// ═══════════════════════════════════════════════
+function renderResults(data){
+  show('s-results');prog(9);
+  document.getElementById('note-txt').textContent=data.mentorNote||'Here are the opportunities I found for you.';
+  const total=data.results?.length||0;
+  document.getElementById('res-sum').innerHTML=`Found <strong>${total} opportunit${total===1?'y':'ies'}</strong> matched to your profile &bull; Searched ${data.searchDate||new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}`;
+  const c=document.getElementById('res-cards');c.innerHTML='';
+  if(!total){
+    c.innerHTML=`<div class="card" style="text-align:center;padding:36px 20px"><div style="font-size:44px;margin-bottom:14px">🔍</div><p style="font-size:16px;font-weight:700">No specific matches found right now</p><p style="font-size:13px;color:var(--muted);margin-top:8px">Programmes may be between funding rounds. Check back in a few weeks or speak with me directly.</p></div>`;
+    return;
+  }
+  const bMap={Grant:'b-grant',Loan:'b-loan',Mentoring:'b-mentoring',Training:'b-training',Mixed:'b-mixed'};
+  data.results.forEach(r=>{
+    const bc=bMap[r.supportType]||'b-mixed';
+    const di=r.deadline?.toLowerCase().includes('rolling')?'🔄':r.deadline?.toLowerCase().includes('check')?'📅':'⏰';
+    c.innerHTML+=`
+<div class="rc">
+  <div class="rc-head">
+    <span class="badge ${bc}">${r.supportType||'Support'}</span>
+    <div class="rc-name">${escHtml(r.name)}</div>
+    <div class="rc-prov">${escHtml(r.provider)}</div>
+  </div>
+  <div class="rc-body">
+    <div class="rl">What It Offers</div><div class="rv">${escHtml(r.whatItOffers)}</div>
+    <div class="rl">Who It's For</div><div class="rv">${escHtml(r.whoItsFor)}</div>
+    <div class="why-box">💡 <strong>Why this is for you:</strong> ${escHtml(r.whyRelevant)}</div>
+    <div class="dl-row"><span>${di}</span><span><strong>Deadline:</strong> ${escHtml(r.deadline)}</span></div>
+  </div>
+  <div class="rc-foot">
+    <a href="${escHtml(r.applyLink)}" target="_blank" rel="noopener noreferrer" class="apply-link">Apply / Find Out More →</a>
+  </div>
+</div>`;
+  });
+  gtag('event','results_displayed',{total_results:total});
+}
+
+function escHtml(s){
+  if(!s)return'';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════════════
+//  END OPTIONS
+// ═══════════════════════════════════════════════
+function doPDF(){toast('Opening print / save dialog…');setTimeout(()=>window.print(),500);gtag('event','save_pdf')}
+
+async function doMentor(){
+  if(!lastResults)return;
+  const summary=(lastResults.results||[]).map((r,i)=>`${i+1}. ${r.name} (${r.provider})\n   ${r.whatItOffers}\n   Apply: ${r.applyLink}`).join('\n\n')||'No results found';
+  if(CFG.EMAILJS_PK!=='YOUR_EMAILJS_PUBLIC_KEY'){
+    try{
+      emailjs.init(CFG.EMAILJS_PK);
+      await emailjs.send(CFG.EMAILJS_SVC,CFG.EMAILJS_TPL,{
+        to_email:CFG.SINEAD_EMAIL,client_name:A.name,client_email:A.email,
+        business_name:A.biz,structure:A.structure,stage:A.stage,
+        sector:A.sector,location:A.location,go_succeed:A.gs,
+        total:lastResults.results?.length||0,results_text:summary,
+        search_date:new Date().toLocaleDateString('en-GB')
+      });
+      toast('✅ Results sent to Sinéad!');
+    }catch(e){fallbackEmail(summary)}
+  }else{fallbackEmail(summary)}
+  gtag('event','share_mentor');
+}
+
+function fallbackEmail(summary){
+  const sub=encodeURIComponent(`Go Succeed Grant Finder — ${A.name} (${A.biz})`);
+  const body=encodeURIComponent(`Client: ${A.name}\nBusiness: ${A.biz}\nEmail: ${A.email}\nStructure: ${A.structure}\nStage: ${A.stage}\nSector: ${A.sector}\nLocation: ${A.location}\n\nOpportunities Found:\n\n${summary}`);
+  window.open(`mailto:${CFG.SINEAD_EMAIL}?subject=${sub}&body=${body}`);
+}
+
+function doShare(){
+  const txt=`I just used Sinéad McKenna's Business Support Finder and found ${lastResults?.results?.length||'several'} funding opportunities for ${A.biz||'my business'}!`;
+  if(navigator.share){navigator.share({title:'My Go Succeed Grant Finder Results',text:txt,url:window.location.href}).catch(()=>copyUrl())}
+  else copyUrl();
+  gtag('event','share_results');
+}
+
+function copyUrl(){
+  navigator.clipboard.writeText(window.location.href).then(()=>toast('✅ Link copied!')).catch(()=>toast('Copy the page URL to share'));
+}
+
+function doRestart(){
+  Object.keys(A).forEach(k=>Array.isArray(A[k])?A[k]=[]:A[k]='');
+  lastResults=null;
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  ['b1','b2','b3','b4','b5','b6','b7'].forEach(id=>document.getElementById(id).disabled=true);
+  document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('vis'));
+  show('s-welcome');prog(0);
+  gtag('event','restart');
+}
+
+// ═══════════════════════════════════════════════
+//  GOOGLE SHEETS LOGGING
+// ═══════════════════════════════════════════════
+function log(event,count=null){
+  if(!CFG.SHEETS_URL||CFG.SHEETS_URL==='YOUR_GOOGLE_APPS_SCRIPT_URL')return;
+  fetch(CFG.SHEETS_URL,{
+    method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({timestamp:new Date().toISOString(),event,name:A.name,email:A.email,business:A.biz,goSucceed:A.gs,structure:A.structure,stage:A.stage,sector:A.sector,location:A.location,resultsCount:count})
+  }).catch(()=>{});
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// Init EmailJS if configured
+if(typeof emailjs!=='undefined'&&CFG.EMAILJS_PK!=='YOUR_EMAILJS_PUBLIC_KEY')emailjs.init(CFG.EMAILJS_PK);
+</script>
+</body>
+</html>
